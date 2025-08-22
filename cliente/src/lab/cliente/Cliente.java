@@ -14,11 +14,13 @@ public class Cliente {
 			System.out.println("[Cliente] Inicio");
 			
 			Scanner teclado = new Scanner(System.in);
-			System.out.println("Digite o IP:");
-			String ip = teclado.nextLine();
 			
-			System.out.println("Digite a porta:");
-			int porta = Integer.parseInt(teclado.nextLine());
+			//Lê o IP da máquina onde a aplicação servidora roda
+			String ip = getParametroDoTeclado(teclado, "Digite o IP", "localhost");
+			
+			//Lê a porta informada pelo usuario pelo teclado
+			int porta = getParametroDoTeclado(teclado, "Digite a porta", 8080);
+
 			
 			//Cria um objeto socket que se conecta na porta escolhida na maquina de endereço informado
 			Socket clientSocket = new Socket(ip, porta);
@@ -35,6 +37,7 @@ public class Cliente {
 			String mensagemParaServidor = teclado.nextLine();
 			//Aqui a mensagem é enviada para a outra ponta do socket(servidor)
 			saidaServidor.println(mensagemParaServidor);
+			saidaServidor.flush();
 
 			Thread.sleep(100);
 			
@@ -53,5 +56,24 @@ public class Cliente {
 		} finally {
 			System.out.println("[Cliente] Fim");
 		}
+	}
+	
+	private static String getParametroDoTeclado(Scanner teclado, String mensagemUsuario, String valorPadrao) {
+		System.out.printf("%s[%s]:", mensagemUsuario, valorPadrao);
+		String nextLine = teclado.nextLine();
+		if (nextLine != null && "".equals(nextLine.trim())) {
+			return valorPadrao;
+		}
+		return nextLine;
+	}
+
+	private static int getParametroDoTeclado(Scanner teclado, String mensagemUsuario, int valorPadrao) {
+		
+		String textoLido = getParametroDoTeclado(teclado, mensagemUsuario, valorPadrao + "");
+
+		if (textoLido != null && "".equals(textoLido.trim())) {
+			return valorPadrao;
+		}
+		return Integer.parseInt(textoLido);
 	}
 }

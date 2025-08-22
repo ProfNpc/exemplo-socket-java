@@ -15,10 +15,10 @@ public class Servidor {
 	public static void main(String[] args) {
 		try {
 			System.out.println("[Servidor] Inicio");
-			
 			Scanner teclado = new Scanner(System.in);
-			System.out.println("Digite a porta:");
-			int porta = Integer.parseInt(teclado.nextLine());
+			
+			//Lê a porta informada pelo usuario pelo teclado
+			int porta = getParametroDoTeclado(teclado, "Digite a porta", 8080);
 			teclado.close();
 			
 			//Cria um objeto ServerSocket para ficar "ouvindo" a porta escolhida
@@ -77,5 +77,24 @@ public class Servidor {
 		} finally {
 			System.out.println("[Servidor] Fim");
 		}
+	}
+
+	private static String getParametroDoTeclado(Scanner teclado, String mensagemUsuario, String valorPadrao) {
+		System.out.printf("%s[%s]:", mensagemUsuario, valorPadrao);
+		String nextLine = teclado.nextLine();
+		if (nextLine != null && "".equals(nextLine.trim())) {
+			return valorPadrao;
+		}
+		return nextLine;
+	}
+
+	private static int getParametroDoTeclado(Scanner teclado, String mensagemUsuario, int valorPadrao) {
+		
+		String textoLido = getParametroDoTeclado(teclado, mensagemUsuario, valorPadrao + "");
+
+		if (textoLido != null && "".equals(textoLido.trim())) {
+			return valorPadrao;
+		}
+		return Integer.parseInt(textoLido);
 	}
 }
